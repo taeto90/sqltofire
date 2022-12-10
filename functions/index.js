@@ -7,7 +7,7 @@ const cors = require('cors')({
     origin: true
 });
 var firestore = require("firebase-admin/firestore");
-const db = firestore.getFirestore();
+
 
 // Create and deploy your first functions
 // https://firebase.google.com/docs/functions/get-started
@@ -34,7 +34,7 @@ admin.initializeApp({
   const DEF_FIREBASE_EMAIL = "@aptner.user";
   const DEF_FIREBASE_OTPDB = "firebase-reflash-token";
   
-
+  const db = firestore.getFirestore();
 
 exports.helloWorld = functions.https.onRequest((request, response) => {
   functions.logger.info("Hello logs!", {structuredData: true});
@@ -130,10 +130,8 @@ cors(request, response, () => {
                 const docs = await db.collection("testtest")
                 .where("wr_id", "==", results[i].wr_id).get();   //sql에서 읽는건 number db에는 string으로 되어있을경우 string으로 변경해야함
                 docs.forEach(async(doc) => {
-                    console.log(doc.id, 'delete>', results[i].wr_id);
                     await db.collection('testtest').doc(doc.id).delete();
                 });
-                //console.log(results[i].wr_id);
             }
         }
     });
@@ -189,10 +187,8 @@ cors(request, response, () => {
                 const docs = await db.collection("testtest")
                 .where("wr_id", "==", results[i].wr_id).get();   //sql에서 읽는건 number db에는 string으로 되어있을경우 string으로 변경해야함
                 docs.forEach(async(doc) => {
-                    console.log(doc.id, 'delete>', results[i].wr_id);
                     await db.collection('testtest').doc(doc.id).update({'jjw':'123123123'});
                 });
-                //console.log(results[i].wr_id);
             }
         }
     });
