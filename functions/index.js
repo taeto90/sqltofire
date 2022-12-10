@@ -116,22 +116,17 @@ cors(request, response, () => {
     pool.query("SELECT * FROM aptner.apt_write where kapt_code= ? and wr_datetime > ? order by wr_datetime desc;", [kapt_code,date], 
     
     async(error, results) => {
-        if (error) {
-            console.log(error); // results는 서버로부터 반환된 행들을 포함한다.
-            response.status(401).send({
-                ErrorCode : 200,
-                ErrorMessage: error
-            });        
-            return;
-        }
-        
         if(results.length > 0){
             for(var i =0; i<results.length; i++){
-                const docs = await db.collection("testtest")
+                try{
+                    const docs = await db.collection("testtest")
                 .where("wr_id", "==", results[i].wr_id).get();   //sql에서 읽는건 number db에는 string으로 되어있을경우 string으로 변경해야함
                 docs.forEach(async(doc) => {
                     await db.collection('testtest').doc(doc.id).delete();
                 });
+                } catch(error){
+                    console.error(error);
+                }
             }
         }
     });
@@ -146,18 +141,13 @@ cors(request, response, () => {
     pool.query("SELECT * FROM aptner.apt_write where kapt_code= ? and wr_datetime > ? order by wr_datetime desc;", [kapt_code,date], 
     
     async(error, results) => {
-        if (error) {
-            console.log(error); // results는 서버로부터 반환된 행들을 포함한다.
-            response.status(401).send({
-                ErrorCode : 200,
-                ErrorMessage: error
-            });        
-            return;
-        }
-        
         if(results.length > 0){
             for(var i =0; i<results.length; i++){
-                const docs = await db.collection("testtest").doc().set(results[i]);
+                try{
+                    const docs = await db.collection("testtest").doc().set(results[i]);
+                }catch(error){
+                    console.error(error);
+                }
             }
         }
     });
@@ -173,22 +163,17 @@ cors(request, response, () => {
     pool.query("SELECT * FROM aptner.apt_write where kapt_code= ? and wr_datetime > ? order by wr_datetime desc;", [kapt_code,date], 
     
     async(error, results) => {
-        if (error) {
-            console.log(error); // results는 서버로부터 반환된 행들을 포함한다.
-            response.status(401).send({
-                ErrorCode : 200,
-                ErrorMessage: error
-            });        
-            return;
-        }
-        
         if(results.length > 0){
             for(var i =0; i<results.length; i++){
-                const docs = await db.collection("testtest")
-                .where("wr_id", "==", results[i].wr_id).get();   //sql에서 읽는건 number db에는 string으로 되어있을경우 string으로 변경해야함
-                docs.forEach(async(doc) => {
+                try{
+                    const docs = await db.collection("testtest")
+                    .where("wr_id", "==", results[i].wr_id).get();   //sql에서 읽는건 number db에는 string으로 되어있을경우 string으로 변경해야함
+                    docs.forEach(async(doc) => {
                     await db.collection('testtest').doc(doc.id).update({'jjw':'123123123'});
                 });
+                }catch(error){
+                    console.error(error);
+                }
             }
         }
     });
